@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {box-sizing: border-box}
+body {font-family: "Lato", sans-serif;}
+
+/* Style the tab */
+.tab {
+  float: left;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  width: 30%;
+  height: 300px;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  display: block;
+  background-color: inherit;
+  color: black;
+  padding: 22px 16px;
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  float: left;
+  padding: 0px 12px;
+  border: 1px solid #ccc;
+  width: 70%;
+  border-left: none;
+  height: 300px;
+}
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .accordion:hover {
+  background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<h1 style="text-align:center;">About Us</h1>
+
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">About Project</button>
+  <button class="tablinks" onclick="openCity(event, 'Paris')">About Team Member</button>
+  <button class="tablinks" onclick="openCity(event, 'Tokyo')">About Mentors</button>
+</div>
+
+<div id="London" class="tabcontent">
+  <h3>About Project</h3>
+  <p>The purpose of this project is to present a detailed description of Bitcoin price analysis which enables the user, investor, and the companies to predict what will be for the price in the future for their better investment. The use of computational and statistical approaches in Bitcoin analytics is gaining popularity for investment comparison, visualisation, and prediction of future price. In this thesis, we will apply techniques from machine learning to the bitcoin previous price dataset to price drop/high and observe how the Adjacent close, price and volume affect the price outcomes. The main purpose of my project is to predict and show the future price of bitcoin through previous data, which make user known when to start investing and when to withdraw their money.</p>
+  <p>We are using data of bitcoin which we have taken from yfinance yahoo. To simplify the data, we have taken Adj close as our dependent value. We have used different module for prediction like logistic linear regression, Decision Tree, K– Nearest Neighbour and LSTM, from all the module we tried to find the best module to predict the price.</p>
+</div>
+
+<div id="Paris" class="tabcontent">
+  <h3>About Team Member</h3>
+  <button class="accordion">Chomendra Singh Sahu</button>
+  <div class="panel">
+    <p>Name: Chomendra Singh Sahu</p>
+    <p>Mail: chomendrasahu097@gmail.com</p>
+    <p>Designation: Final Year Student</p>
+    <p>College: Lovely Professional University</p>
+  </div>
+  
+  <button class="accordion">Alka Singh</button>
+  <div class="panel">
+    <p>Name: Alka Singh</p>
+    <p>Mail: singhalka5972@gmail.com</p>
+    <p>Designation: Final Year Student</p>
+    <p>College: Lovely Professional University</p>
+  </div>
+  
+  <button class="accordion">Abhinav Srivastava</button>
+  <div class="panel">
+    <p>Name: Abhinav Srivastava</p>
+    <p>Mail: abhinavsrivastava865@gmail.com</p>
+    <p>Designation: Final Year Student</p>
+    <p>College: Lovely Professional University</p>
+  </div>
+
+  <button class="accordion">Gautam</button>
+  <div class="panel">
+    <p>Name: Gautam</p>
+    <p>Mail: gautamananad2002@gmail.com</p>
+    <p>Designation: Final Year Student</p>
+    <p>College: Lovely Professional University</p>
+  </div>
+</div>
+
+<div id="Tokyo" class="tabcontent">
+  <h3>About Mentors</h3>
+  <button class="accordion">Sushil Lekhi</button>
+  <div class="panel">
+    <p>Name: Sushil Lekhi</p>
+    <p>Mail: sushil.28857@lpu.co.in</p>
+    <p>Designation: Assistant Professor</p>
+    <p>College: Lovely Professional University</p>
+  </div>
+
+  <button class="accordion">Gurbinder Singh Brar</button>
+  <div class="panel">
+    <p>Name: Gurbinder Singh Brar </p>
+    <p>Mail: maatibrar@gmail.com</p>
+    <p>Designation: Assistant Professor</p>
+    <p>College: Lovely Professional University</p>
+  </div>
+</div>
+
+
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    /* Toggle between adding and removing the "active" class,
+    to highlight the button that controls the panel */
+    this.classList.toggle("active");
+
+    /* Toggle between hiding and showing the active panel */
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+</script>
+   
+</body>
+</html>

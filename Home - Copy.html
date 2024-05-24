@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>Bitcoin_Price_Prediction</title>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: black; /* Set background color to black */
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-image: url("https://cdn.pixabay.com/photo/2022/11/30/14/04/trading-7626924_640.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding: 60px;
+    text-align: center;
+    font-size: medium;
+    color: whitesmoke;
+}
+
+#navbar {
+    overflow: hidden;
+    background-color: #333;
+}
+
+#navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 22px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+#navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+#navbar a.active {
+    background-color: #04AA6D;
+    color: white;
+}
+
+.navbar .search-container {
+    float: right;
+}
+
+.navbar .search-container button {
+    float: right;
+    padding: 20px;
+    margin-top: 16px;
+    margin-right: 16px;
+    background: #ddd;
+    font-size: 30px;
+    border: none;
+    cursor: pointer;
+}
+
+.navbar .search-container button:hover {
+    background: #ccc;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+}
+
+.data {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.data div {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.container1 {
+  display: flex;
+  background-color: #111;
+}
+
+.left-side {
+  flex: 2; /* Takes up 2/3 of the container */
+  background-color: black;
+}
+
+.right-side {
+  flex: 1; /* Takes up 1/3 of the container */
+  background-color: rgb(52, 52, 69);
+}
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 60px;
+}
+
+.sidebar {
+    height: 100%; 
+    width: 0; 
+    position: fixed; 
+    z-index: 1; 
+    top: 0;
+    left: 0;
+    background-color: #111; 
+    overflow-x: hidden; 
+    padding-top: 60px; 
+    transition: 0.5s; 
+  }
+  .sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+  .sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  .openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+  }
+  
+  .openbtn:hover {
+    background-color: #444;
+  }
+  #main {
+    transition: margin-left .5s; 
+    padding: 20px;
+  }
+  @media screen and (max-height: 450px) {
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
+  }
+  form {
+  border: 3px solid #f1f1f1;
+  font-family: Arial;
+}
+
+.container3 {
+  padding: 20px;
+  background-color: #f1f1f1;
+}
+
+input[type=text], input[type=submit] {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+input[type=checkbox] {
+  margin-top: 16px;
+}
+
+input[type=submit] {
+  background-color: #04AA6D;
+  color: white;
+  border: none;
+}
+
+input[type=submit]:hover {
+  opacity: 0.8;
+}
+div.scroll-container {
+  background-color: #333;
+  overflow: auto;
+  white-space: nowrap;
+  padding: 10px;
+}
+
+div.scroll-container img {
+  padding: 10px;
+}
+
+
+  .hide {
+    display: none;
+  }
+
+  .btn-read-more {
+    background-color: #04AA6D;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+
+  .btn-read-more:hover {
+    background-color: #45a049;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h2>Bitcoin Price Analysis</h2>
+  <p>Analysis and Prediction of Bitcoin</p>
+  <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Different methods for Prediction</span>
+</div>
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="Overview.html">Overview</a>
+    <a href="KNN.html">K-Nearest Neighbor</a>
+    <a href="linear.html">Linear Regression</a>
+    <a href="decisiontree.html">Decision Tree</a>
+    <a href="LSTM.html">Long Short Term Memory(LSTM)</a>
+  </div> 
+<div id="navbar">
+  <a class="active" href="javascript:void(0)">Home</a>
+  <div class="dropdown">
+    <div class="dropdown-content">
+      <a href="Introduction.html">Introduction</a>
+      <a href="Objective_and_scope.html">Objectives and project scope</a>
+      <a href="System_Design.html">System Design</a>
+    </div>
+  </div> 
+  <a href="Data_Visualization_1.html">Graph And Analysis</a>
+  <a href="loginpage.html"><i class="fa fa-fw fa-user"></i>Log In</a>
+  <a href="about us.html">About Us</a>
+</div>
+
+<div class="container">
+    <h1 style="color: black;">Real-Time Bitcoin Data</h1>
+    <div class="data">
+        <div>
+            <h3>Price</h3>
+            <p><span id="price"></span></p>
+        </div>
+        <div>
+            <h3>Volume</h3>
+            <p><span id="volume"></span></p>
+        </div>
+        <div>
+            <h3>Market Cap</h3>
+            <p><span id="market-cap"></span></p>
+        </div>
+        <div>
+            <h3>Total Supply</h3>
+            <p><span id="total-supply"></span></p>
+        </div>
+        <div>
+            <h3>Max Supply</h3>
+            <p><span id="max-supply"></span></p>
+        </div>
+    </div>
+</div>
+<div class="container1">
+    <div class="left-side">
+      <!-- Content for the left side -->
+      <img src="https://coincodex.com/en/resources/images//admin/news/bitcoin-price-predic-13/bitcoin-long-term-price-chart-with-halving-markers.png" alt="Mountains" style="width:100%">
+        <h1>About Bitcoin</h1>
+      
+        <p style="color: white;">The Bitcoin price is $63,206.64, a change of -1.06% over the past 24 hours as of 2:22 a.m. The recent price action in Bitcoin left the tokens market capitalization at $1.24T. So far this year, Bitcoin has a change of 49.42%. Bitcoin is classified as a Currency under CoinDesks Digital Asset Classification Standard (DACS).</p>
+      
+        <p style="color: white;" class="more-info">Bitcoin is the world’s first decentralized cryptocurrency – a type of digital asset that uses public-key cryptography to record, sign and send transactions over the Bitcoin blockchain – all done without the oversight of a central authority.</p>
+      
+        <p style="color: white;" class="more-info hide">The Bitcoin network (with an upper-case “B”) was launched in January 2009 by an anonymous computer programmer or group of programmers under the pseudonym “Satoshi Nakamoto.” The network is a peer-to-peer electronic payment system that uses a cryptocurrency called bitcoin (lower case “b”) to transfer value over the internet or act as a store of value like gold and silver.</p>
+      
+        <button class="btn-read-more" onclick="toggleInfo()">Read More</button>
+<br>
+          <h1>Bitcoin price</h1>
+        
+          <p style="color: white;">Bitcoin’s price is renowned for being highly volatile, but despite that, it has become the top performing asset of any class (including stocks, commodities and bonds) over the past decade – climbing a staggering 9,000,000% between 2010 and 2020.</p>
+        
+          <p style="color: white;" class="more-info">When the cryptocurrency was launched at the beginning of 2009, as Satoshi Nakamoto mined the bitcoin genesis block (the first-ever block on the Bitcoin blockchain), 50 BTC entered circulation at a price of $0.00.
+              Fifty bitcoin continued to enter circulation every block (created once every 10 minutes) until the first halving event took place in November 2012 (see below).</p>
+        
+          <p style="color: white;" class="more-info hide">When the cryptocurrency was launched at the beginning of 2009, as Satoshi Nakamoto mined the bitcoin genesis block (the first-ever block on the Bitcoin blockchain), 50 BTC entered circulation at a price of $0.00.
+              Fifty bitcoin continued to enter circulation every block (created once every 10 minutes) until the first halving event took place in November 2012 (see below). Halvings refer to bitcoin’s issuance system, which was programmed into Bitcoin’s code by Satoshi Nakamoto. It essentially involves automatically halving the number of new BTC entering circulation every 210,000 blocks.
+              In February 2011, BTC’s price reached parity with the U.S dollar for the first time. The milestone encouraged new investors into the market, and over the next four months, bitcoin’s price continued to rise – peaking at over $30.
+             <br><br>By early 2013, the leading cryptocurrency had recovered from a prolonged bearish episode and rose above $1,000, albeit only briefly. But with the infamous Mt Gox hack, China announcing its first ban on crypto and other situations, it took a further four years for the BTC price to return to above $1,000 again. Once that level was passed, however, bitcoin’s price continued to surge dramatically throughout 2017 until BTC peaked at its previous long-standing all-time high of $19,850.
+              Over 2018, the entire crypto market plunged into what is now known as the “crypto winter” – a yearlong bear market. It wasn’t until December 2020, when bitcoin returned to test the previous all-time high, that it eventually surpassed that historical level and rose a further 239% over the next 119 days to a new all-time high of $64,799.</p>
+          <button class="btn-read-more" onclick="toggleInfo()">Read More</button>
+          <br>
+          <h1>Who Created Bitcoin?</h1>
+      
+        <p style="color: white;">The creator of Bitcoin, known only by the pseudonym "Satoshi Nakamoto," first proposed this revolutionary digital currency in a 2008 whitepaper titled "Bitcoin: A Peer-to-Peer Electronic Cash System."</p>
+      
+        <p style="color: white;" class="more-info">Satoshi devised Bitcoin as a decentralized, peer-to-peer network, able to facilitate financial transactions without a central authority like a government or bank. In doing so, Satoshi solved a key issue, the double-spending problem, by creating a proof-of-work consensus mechanism within a blockchain structure. </p>
+      
+        <p style="color: white;" class="more-info hide">Satoshi devised Bitcoin as a decentralized, peer-to-peer network, able to facilitate financial transactions without a central authority like a government or bank. In doing so, Satoshi solved a key issue, the double-spending problem, by creating a proof-of-work consensus mechanism within a blockchain structure. Bitcoin's network was activated in January 2009 when Satoshi mined the first block, or the "genesis block." Despite the transformative impact of Bitcoin, Satoshi Nakamoto's identity remains shrouded in mystery, a symbol of the privacy-oriented ethos at the heart of the cryptocurrency movement.</p>
+      
+        <button class="btn-read-more" onclick="toggleInfo()">Read More</button>
+        <br>
+        <br>
+      <form action="/action_page.php">
+        <div class="container3">
+          <h2>Subscribe to our webpage</h2>
+          <p>"Subscribe to our webpage for important notifications!"</p>
+      <p>"Stay updated by subscribing to receive important notifications from us!"</p>
+        </div>
+      
+        <div class="container3" style="background-color:white">
+          <input type="text" placeholder="Name" name="name" required>
+          <input type="text" placeholder="Email address" name="mail" required>
+          <label>
+            <input type="checkbox" checked="checked" name="subscribe"> Daily Newsletter
+          </label>
+        </div>
+      
+        <div class="container3">
+          <input type="submit" value="Subscribe">
+        </div>
+      </form>
+
+    </div>
+    <div class="right-side">
+      <div class="container">
+        <h1 style="color: black;">Bitcoin News</h1>
+        <div class="row">
+            <div class="column">
+              <div class="content">
+                <img src="https://www.coindesk.com/resizer/8EZiNRQrxskWwDNFw6bMx7QB3V0=/975x510/filters:quality(80):format(webp)/cloudfront-us-east-1.images.arcpublishing.com/coindesk/ZVCZZVOT2VBJNEFG7Z2XC2OUZ4.jpg" alt="Mountains" style="width:100%">
+                <h3>Bitcoin Chops Around $64K, With Japanese Yen's Tumble Maybe Signaling 'Currency Turmoil,' Analyst Says</h3>
+                <p>The yen's volatile episode may spread to other fiat currencies as U.S. rate cuts remain elusive amid sticky inflation, which could drive investors to gold and bitcoin, Noelle Acheson said in an interview.</p>
+                <a href="https://www.coindesk.com/markets/2024/04/26/bitcoin-chops-around-64k-with-japanese-yens-tumble-maybe-signaling-currency-turmoil-analyst-says/?_gl=1*1q7gwg5*_up*MQ..*_ga*MTgwMDYwNDg0Mi4xNzE0MjQzMjY3*_ga_VM3STRYVN8*MTcxNDI0MzI2Ny4xLjAuMTcxNDI0MzI2Ny4wLjAuMTE4Njk3MDY1MQ..">Read More ...</a>
+            </div>
+            </div>
+            <br>
+            <div class="column">
+              <div class="content">
+              <img src="https://www.coindesk.com/resizer/cPf_ccQ0Cqhj5yzQtFWf2Fn0cJc=/1056x660/filters:quality(80):format(webp)/cloudfront-us-east-1.images.arcpublishing.com/coindesk/ABZVKJSEEFG7POHNEKKWPTHFXU.png" alt="Lights" style="width:100%">
+                <h3>A Deep-Dive into Somnia's Quest for the United Metaverse of Web3</h3>
+                <p>What steps can we take to guarantee that the metaverse – once imagined as a Disneyland we can carry with us – achieves its ultimate goal of becoming a flawlessly interconnected, collaborative and equitable virtual space?</p>
+                <a href="https://www.coindesk.com/sponsored-content/a-deep-dive-into-somnias-quest-for-the-united-metaverse-of-web3/?_gl=1*1bvbxl4*_up*MQ..*_ga*MTg2NjUwNzYyOC4xNzE0MjQ4MzIw*_ga_VM3STRYVN8*MTcxNDI0ODMxOS4xLjAuMTcxNDI0ODMxOS4wLjAuMTc2MzYzNDY1OA..">Read More....</a>
+              </div>
+            </div>
+            <br>
+            <div class="column">
+              <div class="content">
+              <img src="https://img.etimg.com/photo/msid-109410414/bitcoin-halving.jpg" alt="Nature" style="width:100%">
+                <h3>How does Bitcoin Halving impact the Bitcoin price?</h3>
+                <p>‘Total circulation will be 21,000,000 coins. It’ll be distributed to network nodes when they make blocks, with the amount cut in half every 4 years. first 4 years: 10,500,000 coins next 4 years: 5,250,000 coins next 4 years: 2,625,000 coins next 4 years: 1,312,500 coins etc…’—Satoshi Nakamoto</p>
+                <a href="https://economictimes.indiatimes.com/markets/cryptocurrency/how-does-bitcoin-halving-impact-the-bitcoin-price/articleshow/109410406.cms">Read More....</a>
+            </div>
+            </div>
+            <br>
+            <div class="column">
+              <div class="content">
+              <img src="https://static.news.bitcoin.com/wp-content/uploads/2024/04/30day.jpg" alt="Mountains" style="width:100%">
+                <h3>Bitcoin Leads 30-Day NFT Sales, Outpacing 24 Blockchain Competitors</h3>
+                <p>While sales of non-fungible tokens (NFTs) have declined by over 38% in the past 30 days compared to the previous month, NFTs minted on the Bitcoin blockchain have dominated, accounting for more than 44% of sales. Statistics from the last 30 days reveal that four of the top five best-selling NFT collections all stem from the Bitcoin blockchain.</p>
+                <a href="https://news.bitcoin.com/bitcoin-leads-30-day-nft-sales-outpacing-24-blockchain-competitors/">Read More....</a>
+            </div>
+            </div>
+          <!-- END GRID -->
+          </div>
+    </div>
+  </div>
+<script>
+function openNav() {
+  document.getElementById("mySidebar").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidebar").style.width = "0";
+  document.getElementById("main").style.marginLeft= "0";
+}
+
+function toggleInfo() {
+    var moreInfo = document.getElementsByClassName('more-info');
+    var btnReadMore = document.querySelector('.btn-read-more');
+
+    for (var i = 0; i < moreInfo.length; i++) {
+      if (moreInfo[i].classList.contains('hide')) {
+        moreInfo[i].classList.remove('hide');
+        btnReadMore.textContent = 'Read Less';
+      } else {
+        moreInfo[i].classList.add('hide');
+        btnReadMore.textContent = 'Read More';
+      }
+    }
+  }
+
+    function myFunction(x) {
+  x.classList.toggle("change");
+}
+// Function to fetch Bitcoin data from CoinGecko API
+function fetchBitcoinData() {
+    fetch('https://api.coingecko.com/api/v3/coins/bitcoin')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('price').textContent = data.market_data.current_price.usd + " USD";
+        document.getElementById('volume').textContent = data.market_data.total_volume.usd + " USD";
+        document.getElementById('market-cap').textContent = data.market_data.market_cap.usd + " USD";
+        document.getElementById('total-supply').textContent = data.market_data.total_supply;
+        document.getElementById('max-supply').textContent = data.market_data.max_supply;
+    })
+    .catch(error => {
+        console.error('Error fetching Bitcoin data:', error);
+    });
+}
+
+// Fetch Bitcoin data initially and then every 5 seconds
+fetchBitcoinData();
+setInterval(fetchBitcoinData, 5000);
+</script>
+</body>
+</html>
